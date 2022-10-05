@@ -16,41 +16,41 @@ paths:
       tags:
         - General
       operationId: guardar-asiento
-    requestBody:
-      content:
-        application/json:
-          example:
-            ReferenceDate: 2022-10-04
-            DueDate: 2022-10-04
-            TaxDate: 2022-10-04
-            Memo: CESIÓN DE PRIMAS REASEGURO EXTRANJERO FACULTATIVO ACCIDENTES PERSONALES
-            References: Prueba de referencia
-          schema:
-            properties:
-              ReferenceDate:
-                description: Fecha de referencia, cuando se produjo la transacción en el CORE.
-                type: date
-              DueDate:
-                description: Fecha de vencimiento.
-                type: date
-              TaxDate:
-                description: Fecha de contabilización fiscal.
-                type: date
-              Memo:
-                description: Glosa mayor del asiento, descripción
-                type: string
-              References:
-                description: Datos de referencias del asiento.
-                type: string
-              JournalEntryLines:
-                description: Glosa mayor del asiento, descripción
-                type: list
-            required:
-              - ReferenceDate
-              - DueDate
-              - TaxDate
-              - JournalEntryLines
-            type: object
+      requestBody:
+        content:
+          application/json:
+            example:
+              ReferenceDate: 2022-10-04
+              DueDate: 2022-10-04
+              TaxDate: 2022-10-04
+              Memo: CESIÓN DE PRIMAS REASEGURO EXTRANJERO FACULTATIVO ACCIDENTES PERSONALES
+              References: Prueba de referencia
+            schema:
+              properties:
+                ReferenceDate:
+                  description: Fecha de referencia, cuando se produjo la transacción en el CORE.
+                  type: date
+                DueDate:
+                  description: Fecha de vencimiento.
+                  type: date
+                TaxDate:
+                  description: Fecha de contabilización fiscal.
+                  type: date
+                Memo:
+                  description: Glosa mayor del asiento, descripción
+                  type: string
+                References:
+                  description: Datos de referencias del asiento.
+                  type: string
+                JournalEntryLines:
+                  description: Glosa mayor del asiento, descripción
+                  type: list
+              required:
+                - ReferenceDate
+                - DueDate
+                - TaxDate
+                - JournalEntryLines
+              type: object
       responses:
         "200":
           description: "OK"
