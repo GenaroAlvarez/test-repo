@@ -1,21 +1,56 @@
 openapi: 3.1.0
 info:
-  title: Tic Tac Toe
+  title: Ganaseguros REST API
   description: |
-    This API allows writing down marks on a Tic Tac Toe board
-    and requesting the state of the board or of individual squares.
-  version: 1.0.0
+    Esta API REST permite el registro de documentos en SAP para el CORE de Ganaseguros.
+  version: 0.1.0
 tags:
-  - name: Gameplay
+  - name: General
 paths:
   # Whole board operations
-  /board:
-    get:
-      summary: Get the whole board
-      description: Retrieves the current state of the board and the winner.
+  /GuardarAsiento:
+    post:
+      summary: Guardar un asiento contable en SAP
+      description: |-
+        Permite guardar un asiento contable en SAP para cualquier contexto donde se lo requiera.
       tags:
-        - Gameplay
-      operationId: get-board
+        - General
+      operationId: guardar-asiento
+    requestBody:
+      content:
+        application/json:
+          example:
+            ReferenceDate: 2022-10-04
+            DueDate: 2022-10-04
+            TaxDate: 2022-10-04
+            Memo: CESIÓN DE PRIMAS REASEGURO EXTRANJERO FACULTATIVO ACCIDENTES PERSONALES
+            References: Prueba de referencia
+          schema:
+            properties:
+              ReferenceDate:
+                description: Fecha de referencia, cuando se produjo la transacción en el CORE.
+                type: date
+              DueDate:
+                description: Fecha de vencimiento.
+                type: date
+              TaxDate:
+                description: Fecha de contabilización fiscal.
+                type: date
+              Memo:
+                description: Glosa mayor del asiento, descripción
+                type: string
+              References:
+                description: Datos de referencias del asiento.
+                type: string
+              JournalEntryLines:
+                description: Glosa mayor del asiento, descripción
+                type: list
+            required:
+              - ReferenceDate
+              - DueDate
+              - TaxDate
+              - JournalEntryLines
+            type: object
       responses:
         "200":
           description: "OK"
@@ -29,6 +64,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/rowParam"
       - $ref: "#/components/parameters/columnParam"
+
     get:
       summary: Get a single board square
       description: Retrieves the requested square.
