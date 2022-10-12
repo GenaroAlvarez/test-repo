@@ -7,6 +7,40 @@ info:
 tags:
   - name: General
 paths:
+    /Auth/ObtenerToken
+        post:
+            summary: Obtiene el token de autenticación
+            descirption: |-
+                Para realizar el consumo de los diferentes servicios de integración, se le proporcionará un usuario con el cual podrá obtener el token, la cual permitirá al sistema integrado consumir los servicios.
+            tags:
+                - Auth
+            operationId: obtener-token
+            requestBody:
+                content:
+                    application/json:
+                        example:
+                            Username: Ganaseguros
+                            Password: 123
+                        schema:
+                            properties:
+                                Username:
+                                    description: Nombre de usuario
+                                    type: string
+                                Password:
+                                    description: Contraseña de usuario
+                                    type: string
+                            required:
+                                - Username
+                                - Password
+                            type: object
+            responses:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/status"
+
   # Whole board operations
   /GuardarAsiento:
     post:
@@ -65,109 +99,109 @@ paths:
       - $ref: "#/components/parameters/rowParam"
       - $ref: "#/components/parameters/columnParam"
 
-    get:
-      summary: Get a single board square
-      description: Retrieves the requested square.
-      tags:
+get:
+    summary: Get a single board square
+    description: Retrieves the requested square.
+    tags:
         - Gameplay
-      operationId: get-square
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/mark"
-        "400":
-          description: The provided parameters are incorrect
-          content:
-            text/html:
-              schema:
-                $ref: "#/components/schemas/errorMessage"
-              example: "Illegal coordinates"
-    put:
-      summary: Set a single board square
-      description: Places a mark on the board and retrieves the whole board and the winner (if any).
-      tags:
-        - Gameplay
-      operationId: put-square
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/mark"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/status"
-        "400":
-          description: The provided parameters are incorrect
-          content:
-            text/html:
-              schema:
-                $ref: "#/components/schemas/errorMessage"
-              examples:
-                illegalCoordinates:
-                  value: "Illegal coordinates."
-                notEmpty:
-                  value: "Square is not empty."
-                invalidMark:
-                  value: "Invalid Mark (X or O)."
+        operationId: get-square
+        responses:
+            "200":
+                description: "OK"
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/mark"
+                            "400":
+                                description: The provided parameters are incorrect
+                                content:
+                                    text/html:
+                                        schema:
+                                            $ref: "#/components/schemas/errorMessage"
+                                            example: "Illegal coordinates"
+                                            put:
+                                                summary: Set a single board square
+                                                description: Places a mark on the board and retrieves the whole board and the winner (if any).
+                                                tags:
+                                                    - Gameplay
+                                                    operationId: put-square
+                                                    requestBody:
+                                                        required: true
+                                                        content:
+                                                            application/json:
+                                                                schema:
+                                                                    $ref: "#/components/schemas/mark"
+                                                                    responses:
+                                                                        "200":
+                                                                            description: "OK"
+                                                                            content:
+                                                                                application/json:
+                                                                                    schema:
+                                                                                        $ref: "#/components/schemas/status"
+                                                                                        "400":
+                                                                                            description: The provided parameters are incorrect
+                                                                                            content:
+                                                                                                text/html:
+                                                                                                    schema:
+                                                                                                        $ref: "#/components/schemas/errorMessage"
+                                                                                                        examples:
+                                                                                                            illegalCoordinates:
+                                                                                                                value: "Illegal coordinates."
+                                                                                                                notEmpty:
+                                                                                                                    value: "Square is not empty."
+                                                                                                                    invalidMark:
+                                                                                                                        value: "Invalid Mark (X or O)."
 
 components:
-  parameters:
-    rowParam:
-      description: Board row (vertical coordinate)
-      name: row
-      in: path
-      required: true
-      schema:
-        $ref: "#/components/schemas/coordinate"
-    columnParam:
-      description: Board column (horizontal coordinate)
-      name: column
-      in: path
-      required: true
-      schema:
-        $ref: "#/components/schemas/coordinate"
-  schemas:
-    errorMessage:
-      type: string
-      maxLength: 256
-      description: A text message describing an error
-    coordinate:
-      type: integer
-      minimum: 1
-      maximum: 3
-      example: 1
-    mark:
-      type: string
-      enum: [".", "X", "O"]
-      description: Possible values for a board square. `.` means empty square.
-      example: "."
-    board:
-      type: array
-      maxItems: 3
-      minItems: 3
-      items:
-        type: array
-        maxItems: 3
-        minItems: 3
-        items:
-          $ref: "#/components/schemas/mark"
-    winner:
-      type: string
-      enum: [".", "X", "O"]
-      description: Winner of the game. `.` means nobody has won yet.
-      example: "."
-    status:
-      type: object
-      properties:
-        winner:
-          $ref: "#/components/schemas/winner"
-        board:
-          $ref: "#/components/schemas/board"
+    parameters:
+        rowParam:
+            description: Board row (vertical coordinate)
+            name: row
+            in: path
+            required: true
+            schema:
+                $ref: "#/components/schemas/coordinate"
+                columnParam:
+                    description: Board column (horizontal coordinate)
+                    name: column
+                    in: path
+                    required: true
+                    schema:
+                        $ref: "#/components/schemas/coordinate"
+                        schemas:
+                            errorMessage:
+                                type: string
+                                maxLength: 256
+                                description: A text message describing an error
+                                coordinate:
+                                    type: integer
+                                    minimum: 1
+                                    maximum: 3
+                                    example: 1
+                                    mark:
+                                        type: string
+                                        enum: [".", "X", "O"]
+                                        description: Possible values for a board square. `.` means empty square.
+                                        example: "."
+                                        board:
+                                            type: array
+                                            maxItems: 3
+                                            minItems: 3
+                                            items:
+                                                type: array
+                                                maxItems: 3
+                                                minItems: 3
+                                                items:
+                                                    $ref: "#/components/schemas/mark"
+                                                    winner:
+                                                        type: string
+                                                        enum: [".", "X", "O"]
+                                                        description: Winner of the game. `.` means nobody has won yet.
+                                                        example: "."
+                                                        status:
+                                                            type: object
+                                                            properties:
+                                                                winner:
+                                                                    $ref: "#/components/schemas/winner"
+                                                                    board:
+                                                                        $ref: "#/components/schemas/board"
