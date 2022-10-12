@@ -6,14 +6,15 @@ info:
   version: 0.1.0
 tags:
   - name: General
+  - name: Auth
 paths:
-    /Auth/ObtenerToken
+    /Auth/ObtenerToken:
         post:
             summary: Obtiene el token de autenticación
             descirption: |-
                 Para realizar el consumo de los diferentes servicios de integración, se le proporcionará un usuario con el cual podrá obtener el token, la cual permitirá al sistema integrado consumir los servicios.
             tags:
-                - General
+                - Auth
             operationId: obtener-token
             requestBody:
                 content:
