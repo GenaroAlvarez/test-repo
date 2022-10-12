@@ -40,169 +40,34 @@ paths:
                     content:
                         application/json:
                             schema:
-#                                 $ref: "#/components/schemas/status"
-
-  # Whole board operations
-  /GuardarAsiento:
-    post:
-      summary: Guardar un asiento contable en SAP
-      description: |-
-        Permite guardar un asiento contable en SAP para cualquier contexto donde se lo requiera.
-      tags:
-        - General
-      operationId: guardar-asiento
-      requestBody:
-        content:
-          application/json:
-            example:
-              ReferenceDate: 2022-10-04
-              DueDate: 2022-10-04
-              TaxDate: 2022-10-04
-              Memo: CESIÓN DE PRIMAS REASEGURO EXTRANJERO FACULTATIVO ACCIDENTES PERSONALES
-              References: Prueba de referencia
-            schema:
-              properties:
-                ReferenceDate:
-                  description: Fecha de referencia, cuando se produjo la transacción en el CORE.
-                  type: date
-                DueDate:
-                  description: Fecha de vencimiento.
-                  type: date
-                TaxDate:
-                  description: Fecha de contabilización fiscal.
-                  type: date
-                Memo:
-                  description: Glosa mayor del asiento, descripción
-                  type: string
-                References:
-                  description: Datos de referencias del asiento.
-                  type: string
-                JournalEntryLines:
-                  description: Glosa mayor del asiento, descripción
-                  type: list
-              required:
-                - ReferenceDate
-                - DueDate
-                - TaxDate
-                - JournalEntryLines
-              type: object
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/status"
-
-  # Single square operations
-  /board/{row}/{column}:
-    parameters:
-      - $ref: "#/components/parameters/rowParam"
-      - $ref: "#/components/parameters/columnParam"
-
-get:
-    summary: Get a single board square
-    description: Retrieves the requested square.
-    tags:
-        - Gameplay
-        operationId: get-square
-        responses:
-            "200":
-                description: "OK"
-                content:
-                    application/json:
-                        schema:
-                            $ref: "#/components/schemas/mark"
-                            "400":
-                                description: The provided parameters are incorrect
-                                content:
-                                    text/html:
-                                        schema:
-                                            $ref: "#/components/schemas/errorMessage"
-                                            example: "Illegal coordinates"
-                                            put:
-                                                summary: Set a single board square
-                                                description: Places a mark on the board and retrieves the whole board and the winner (if any).
-                                                tags:
-                                                    - Gameplay
-                                                    operationId: put-square
-                                                    requestBody:
-                                                        required: true
-                                                        content:
-                                                            application/json:
-                                                                schema:
-                                                                    $ref: "#/components/schemas/mark"
-                                                                    responses:
-                                                                        "200":
-                                                                            description: "OK"
-                                                                            content:
-                                                                                application/json:
-                                                                                    schema:
-                                                                                        $ref: "#/components/schemas/status"
-                                                                                        "400":
-                                                                                            description: The provided parameters are incorrect
-                                                                                            content:
-                                                                                                text/html:
-                                                                                                    schema:
-                                                                                                        $ref: "#/components/schemas/errorMessage"
-                                                                                                        examples:
-                                                                                                            illegalCoordinates:
-                                                                                                                value: "Illegal coordinates."
-                                                                                                                notEmpty:
-                                                                                                                    value: "Square is not empty."
-                                                                                                                    invalidMark:
-                                                                                                                        value: "Invalid Mark (X or O)."
-
-components:
-    parameters:
-        rowParam:
-            description: Board row (vertical coordinate)
-            name: row
-            in: path
-            required: true
-            schema:
-                $ref: "#/components/schemas/coordinate"
-                columnParam:
-                    description: Board column (horizontal coordinate)
-                    name: column
-                    in: path
-                    required: true
-                    schema:
-                        $ref: "#/components/schemas/coordinate"
-                        schemas:
-                            errorMessage:
-                                type: string
-                                maxLength: 256
-                                description: A text message describing an error
-                                coordinate:
-                                    type: integer
-                                    minimum: 1
-                                    maximum: 3
-                                    example: 1
-                                    mark:
-                                        type: string
-                                        enum: [".", "X", "O"]
-                                        description: Possible values for a board square. `.` means empty square.
-                                        example: "."
-                                        board:
-                                            type: array
-                                            maxItems: 3
-                                            minItems: 3
-                                            items:
-                                                type: array
-                                                maxItems: 3
-                                                minItems: 3
-                                                items:
-                                                    $ref: "#/components/schemas/mark"
-                                                    winner:
-                                                        type: string
-                                                        enum: [".", "X", "O"]
-                                                        description: Winner of the game. `.` means nobody has won yet.
-                                                        example: "."
-                                                        status:
-                                                            type: object
-                                                            properties:
-                                                                winner:
-                                                                    $ref: "#/components/schemas/winner"
-                                                                    board:
-                                                                        $ref: "#/components/schemas/board"
+                                $ref: "#/components/schemas/actions-billing-usage"
+schemas:
+    actions-billing-usage:
+        properties:
+            included_minutes:
+                description: The amount of free GitHub Actions minutes available.
+                type: integer
+            minutes_used_breakdown:
+                properties:
+                    MACOS:
+                        description: Total minutes used on macOS runner machines.
+                        type: integer
+                    UBUNTU:
+                        description: Total minutes used on Ubuntu runner machines.
+                        type: integer
+                    WINDOWS:
+                        description: Total minutes used on Windows runner machines.
+                        type: integer
+                type: object
+            total_minutes_used:
+                description: The sum of the free and paid GitHub Actions minutes used.
+                type: integer
+            total_paid_minutes_used:
+                description: The total paid GitHub Actions minutes used.
+                type: integer
+        required:
+            - total_minutes_used
+            - total_paid_minutes_used
+            - included_minutes
+            - minutes_used_breakdown
+        type: object
