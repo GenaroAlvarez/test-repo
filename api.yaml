@@ -13,7 +13,7 @@ paths:
             descirption: |-
                 Para realizar el consumo de los diferentes servicios de integración, se le proporcionará un usuario con el cual podrá obtener el token, la cual permitirá al sistema integrado consumir los servicios.
             tags:
-                - Auth
+                - General
             operationId: obtener-token
             requestBody:
                 content:
